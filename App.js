@@ -1,20 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import 'react-native-gesture-handler';
+import React from 'react';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import SplashScreen from './frontend/screens/splashScreen';
+import MainDrawer from './frontend/navigation/drawer';
+
+import { WishlistProvider } from './frontend/components/wishlistContext';
+import { AuthModalProvider } from './frontend/components/authModalContext';
+import { CartProvider } from './frontend/screens/cartScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <AuthModalProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <NavigationContainer>
+              <Stack.Navigator
+                initialRouteName="Splash"
+                screenOptions={{ headerShown: false }}
+              >
+                <Stack.Screen
+                  name="Splash"
+                  component={SplashScreen}
+                />
+
+                <Stack.Screen
+                  name="Main"
+                  component={MainDrawer}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </WishlistProvider>
+        </CartProvider>
+      </AuthModalProvider>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
